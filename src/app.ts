@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express, { Express, Response } from "express";
 
 class App {
 
@@ -9,8 +9,15 @@ class App {
     this._app = express();
   }
   public configure() {
+    this._app.use(express.json());
 
+    this._app.get("/health", (res: Response) => {
+      res.send({ status: "OK" });
+    }
+
+    );
   }
+
   public strat() {
     this._app.listen(this.port, (error) => {
       if (error) {
