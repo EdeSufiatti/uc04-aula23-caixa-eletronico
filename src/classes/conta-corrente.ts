@@ -1,85 +1,79 @@
-// conta corrente
-//class
+import crypto from "node:crypto";
 
-class ContaCorrente {
-  private _agencia: string;
+export default class ContaCorrente {
+  private _id: string;
+  private _agencia: number;
   private _numero: number;
   private _nomeCliente: string;
-  private _dataNascimento: Date;
-  private _saldo: number;
-  private _dataCriacao: Date;
   private _cpf: string;
+  private _dataNascimento: Date;
+  private _dataCriacao: Date;
+  private _saldo: number;
 
-
-  constructor(agencia: string,
+  constructor(
+    agencia: number,
     numero: number,
-    cpf: string,
     nomeCliente: string,
+    cpf: string,
     dataNascimento: Date,
     dataCriacao: Date
-
-
   ) {
+    this._id = crypto.randomUUID();
     this._agencia = agencia;
     this._numero = numero;
     this._nomeCliente = nomeCliente;
+    this._cpf = cpf;
     this._dataNascimento = dataNascimento;
     this._dataCriacao = dataCriacao;
-    this._cpf = cpf;
     this._saldo = 0;
   }
 
-  get agencia(): string {
+  public get id() {
+    return this._id;
+  }
+
+  public get agencia() {
     return this._agencia;
   }
-  get numero(): number {
+
+  public get numero() {
     return this._numero;
   }
-  get nomeCliente(): string {
+
+  public get nomeCliente() {
     return this._nomeCliente;
   }
-  get dataNascimento(): Date {
-    return this._dataNascimento;
-  }
-  get dataCriacao(): Date {
-    return this._dataCriacao;
-  }
-  get cpf(): string {
+
+  public get cpf() {
     return this._cpf;
   }
 
+  public get dataNascimento() {
+    return this._dataNascimento;
+  }
 
-  public get saldo(): number {
+  public get dataCriacao() {
+    return this._dataCriacao;
+  }
+
+  public get saldo() {
     return this._saldo;
   }
+
   public setSaldo(valor: number, tipoOperacao: "C" | "D") {
     if (!valor || valor <= 0) {
-      throw new Error("O valor informado é inválido");
+      throw new Error("Valor inválido");
     }
 
-    switch (tipoOperacao) {
-      case "C":
-        this._saldo = this._saldo + valor;
-        break;
-      case "D":
-        if (this._saldo < valor) {
-          throw new Error("Operação inválida: saldo insuficiente");
-        }
-        this._saldo = this._saldo - valor;
-        break;
-      default:
-        throw new Error("Operação inválida");
+    if (tipoOperacao === "C") {
+      this._saldo = this._saldo + valor;
+    } else if (tipoOperacao === "D") {
+      if (valor > this._saldo) {
+        throw new Error("Saldo insuficiente.");
+      }
+      this._saldo = this._saldo - valor;
+    } else {
+      throw new Error("Tipo de operação inválida");
     }
-
   }
-
-  public extrato(): string {
-    return `Agencia: ${this._agencia} Conta: ${this._numero} Saldo: ${this._saldo}`;
-  }
-
-
 }
-
-export default ContaCorrente;
-
-
