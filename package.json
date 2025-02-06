@@ -1,5 +1,5 @@
 {
-  "name": "uc04-aula23-caixa-eletronico",
+  "name": "uc04-caixa-eletronico-api",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
